@@ -1,11 +1,5 @@
 const express = require('express');
 const compression = require('compression');
-const fs = require('fs'); //kill
-const sqlite = require('sql.js'); //kill
-
-const filebuffer = fs.readFileSync('db/usda-nnd.sqlite3'); //kill
-
-const db = new sqlite.Database(filebuffer); //kill
 
 const app = express();
 
@@ -16,54 +10,8 @@ if (process.env.NODE_ENV === 'production') {
     app.use(express.static('client/build'));
 }
 
-const COLUMNS = [
-    'carbohydrate_g',
-    'protein_g',
-    'fa_sat_g',
-    'fa_mono_g',
-    'fa_poly_g',
-    'kcal',
-    'description',
-]; //kill
-app.get('/api/food', (req, res) => { //rework
-    const param = req.query.q;
-
-    if (!param) {
-        res.json({
-            error: 'Missing required parameter `q`',
-        });
-        return;
-    }
-
-    // WARNING: Not for production use! The following statement
-    // is not protected against SQL injections.
-    const r = db.exec(`
-    select ${COLUMNS.join(', ')} from entries
-    where description like '%${param}%'
-    limit 100
-  `);
-
-    if (r[0]) {
-        res.json(
-            r[0].values.map((entry) => {
-                const e = {};
-                COLUMNS.forEach((c, idx) => {
-                    // combine fat columns
-                    if (c.match(/^fa_/)) {
-                        e.fat_g = e.fat_g || 0.0;
-                        e.fat_g = (
-                            parseFloat(e.fat_g, 10) + parseFloat(entry[idx], 10)
-                        ).toFixed(2);
-                    } else {
-                        e[c] = entry[idx];
-                    }
-                });
-                return e;
-            }),
-        );
-    } else {
-        res.json([]);
-    }
+app.get('/api/', (req, res) => { //rework
+    res.status(404).send('work this out, bro')
 });
 
 app.listen(app.get('port'), () => {
