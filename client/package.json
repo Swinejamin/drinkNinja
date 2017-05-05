@@ -5,7 +5,7 @@
   "dependencies": {
     "create-react-class": "^15.5.2",
     "firebase": "^3.7.6",
-    "material-ui": "^0.17.3",
+    "material-ui": "^0.18.0",
     "prop-types": "^15.5.6",
     "react": "^15.5.3",
     "react-dom": "^15.5.3",
@@ -16,6 +16,8 @@
     "custom-react-scripts": "0.0.23"
   },
   "scripts": {
+    "build-css": "node-sass src/ -o src/",
+    "watch-css": "npm run build-css && node-sass src/ -o src/ --watch --recursive",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
