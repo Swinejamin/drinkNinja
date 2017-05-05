@@ -1,12 +1,11 @@
 import React from 'react';
 import {auth, database} from '../../config/database'
-
 import {Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar';
-
 import CircularProgress from 'material-ui/CircularProgress';
 
 // import IngredientFinder from '../../components/Ingredients/IngredientFinder';
 import RecipeBrowser from '../../components/Recipes/RecipeBrowser';
+import './dashboard.scss';
 
 
 class Dashboard extends React.Component {
@@ -61,8 +60,7 @@ class Dashboard extends React.Component {
 
     render() {
         return (
-            <main>
-                <div className="console-paper">
+            <main className="dashboard__main">
                     <div>
                         <Toolbar>
                             <ToolbarGroup>
@@ -83,9 +81,6 @@ class Dashboard extends React.Component {
                         <RecipeBrowser recipes={database.ref(`recipes`)} featured={this.state.featuredTags}
                                        userIngredients={database.ref(`users/${this.state.uid}/ingredients`)}/>
                     </div>
-
-
-                </div>
             </main>
         );
     }
