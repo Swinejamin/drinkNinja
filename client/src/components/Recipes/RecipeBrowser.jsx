@@ -39,12 +39,12 @@ class RecipeBrowser extends React.Component {
             <GridList cols={2} padding={15} cellHeight={400} style={{paddingTop: 15}}>
                 {this.state.masterRecipes.length > 0 ?
                     this.state.masterRecipes.map((recipe, index) => {
-                            const featured = Math.round(Math.random());
+                            const featured = 0;
                             const key = recipe[0];
                             const value = recipe[1];
                             return (
                                 <GridTile title={value.title}
-                                          key={index} titlePosition="top"
+                                          key={key} titlePosition="top"
                                           containerElement={<Link to={`recipe/${key}`}/>}
                                           rows={featured ? 2 : 1} cols={featured ? 2 : 1}
                                           titleBackground="linear-gradient(to bottom, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)">

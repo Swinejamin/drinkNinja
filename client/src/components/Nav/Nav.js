@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import Drawer from 'material-ui/Drawer';
@@ -11,29 +11,31 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 import {auth} from '../../config/database'
 
-
-console.log(styles)
 class Nav extends React.Component {
     // constructor(props) {
     //     super(props);
     // }
     handleClose = () => {
         this.props.handleClose();
-    }
-    handleLogout = () => {
-
-        console.log('signout')
-        auth.signOut();
-    }
+    };
 
     render() {
+        const closer = this.props.handleClose;
+        const LoginButton = withRouter(({ history }) => (
+            <RaisedButton
+                label="Log Out"
+                onTouchTap={function(){
+                    auth.signOut().then(function(){
+                        history.push('/login');
+                        closer();
+                    });
+                }}
+            />));
+
         return (
             <nav className={styles.nav}>
                 <Drawer open={this.props.open}>
-                    <RaisedButton
-                        label="Log Out"
-                        onTouchTap={this.handleLogout}
-                    />
+                    <LoginButton/>
                     {this.props.routes.map((route, index) => {
                         return (
 
@@ -55,5 +57,5 @@ Nav.propTypes = {
     routes: PropTypes.array.isRequired,
     open: PropTypes.bool.isRequired,
     handleClose: PropTypes.func.isRequired
-}
-export default Nav;
+};
+export default withRouter(Nav);

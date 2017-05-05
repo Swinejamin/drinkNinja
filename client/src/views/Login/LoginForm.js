@@ -5,7 +5,6 @@ import Paper from 'material-ui/Paper';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import {Link, Redirect} from 'react-router-dom';
-// import auth from '../../config/database';
 import {auth} from '../../config/database';
 import PropTypes from 'prop-types';
 
@@ -71,6 +70,20 @@ class Login extends React.Component {
         this.handleEmailChange = this.handleEmailChange.bind(this);
     }
 
+    componentWillMount() {
+        const that = this;
+        auth.onAuthStateChanged(function handleAuthChange() {
+            if (auth.currentUser) {
+                that.setState({
+                    redirectToReferrer: true
+                });
+            } else {
+                console.log(auth.currentUser)
+            }
+        })
+
+    }
+
     handleEmailChange(e) {
         this.setState({email: e.target.value});
     }
@@ -94,7 +107,7 @@ class Login extends React.Component {
     login = (email, pword) => {
         auth.signInWithEmailAndPassword(email, pword)
             .then((res) => {
-                    console.log(res)
+                    console.log(res);
                     this.setState({redirectToReferrer: true})
                 }
             )
@@ -103,21 +116,21 @@ class Login extends React.Component {
                     errorMessage: error.message,
                 });
             });
-    }
+    };
 
     render() {
         const {from} = this.props.location.state || {from: {pathname: '/'}};
         const {redirectToReferrer} = this.state;
 
+
         if (redirectToReferrer) {
-            console.log(from)
+            console.log(from);
             return (
                 <Redirect to={from}/>
             )
         }
-
         return (
-            <Paper className="loginForm">
+            <Paper className="Login">
                 <Toolbar>
                     <ToolbarGroup>
                         <ToolbarTitle text="Login"/>
@@ -159,7 +172,7 @@ class Login extends React.Component {
 
 Login.propTypes = {
     location: PropTypes.object.isRequired
-}
+};
 
 
 export default Login;
