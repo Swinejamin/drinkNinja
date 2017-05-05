@@ -3,11 +3,13 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import routes from './config/routes';
 import './App.scss';
 import Nav from './components/Nav/Nav'
-import auth from './config/database';
+import {auth} from './config/database';
 import Login from './views/Login/LoginForm';
+import Recipe from './views/Recipe/Recipe';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import Paper from 'material-ui/Paper';
 
 
 import RaisedButton from 'material-ui/RaisedButton';
@@ -41,37 +43,40 @@ class App extends React.Component {
 
             <Router>
                 <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
-                    <div className="app">
-                        <RaisedButton
-                            label="Toggle Drawer"
-                            onTouchTap={this.handleDrawerToggle}
-                        />
+                    <Paper>
+                        <div className="App">
+                            <RaisedButton
+                                label="Toggle Drawer"
+                                onTouchTap={this.handleDrawerToggle}
+                            />
 
-                        <Nav routes={routes} open={this.state.open} handleClose={this.handleDrawerClose}/>
+                            <Nav routes={routes} open={this.state.open} handleClose={this.handleDrawerClose}/>
 
-                        <Switch>
-                            <Route path="/login" component={Login}/>
-                            {routes.map((route, index) => (
-                                    route.private ?
-                                        <AuthRoute key={index} exact={route.exact} path={route.path}
-                                                   component={route.main}/> :
-                                        <Route key={index} exact={route.exact} path={route.path} component={route.main}/>
-                                )
-                            )}
-                        </Switch>
-
-                        {auth && auth.currentUser && auth.currentUser.isAdmin ?
                             <Switch>
-                                {routes.map((route, index) => {
-                                    return (
-                                        <AdminRoute key={index} {...route}/>
+                                <Route path="/login" component={Login}/>
+                                <Route path="/recipe/:id" component={Recipe}/>
+                                {routes.map((route, index) => (
+                                        route.private ?
+                                            <AuthRoute key={index} exact={route.exact} path={route.path}
+                                                       component={route.main}/> :
+                                            <Route key={index} exact={route.exact} path={route.path}
+                                                   component={route.main}/>
                                     )
-                                })}
-                            </Switch> :
-                            ''
-                        }
-                    </div>
+                                )}
+                            </Switch>
 
+                            {auth && auth.currentUser && auth.currentUser.isAdmin ?
+                                <Switch>
+                                    {routes.map((route, index) => {
+                                        return (
+                                            <AdminRoute key={index} {...route}/>
+                                        )
+                                    })}
+                                </Switch> :
+                                ''
+                            }
+                        </div>
+                    </Paper>
                 </MuiThemeProvider>
             </Router >
         )
