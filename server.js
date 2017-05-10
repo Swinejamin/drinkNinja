@@ -10,10 +10,6 @@ if (process.env.NODE_ENV === 'production') {
     app.use(express.static('client/build'));
 }
 
-app.get('/api/', (req, res) => { //rework
-    res.status(404).send('work this out, bro')
-});
-
 app.listen(app.get('port'), () => {
     console.log(`Find the server at: http://localhost:${app.get('port')}/`); // eslint-disable-line no-console
 });

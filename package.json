@@ -10,6 +10,7 @@
     "firebase": "^3.7.6",
     "fs": "0.0.2"
   },
+  "engine": "node 7.1.0",
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "server": "babel-node server.js",
@@ -22,7 +23,6 @@
     "eslint-config-airbnb": "14.1.0",
     "eslint-plugin-import": "2.2.0",
     "eslint-plugin-jsx-a11y": "4.0.0",
-    "eslint-plugin-react": "6.9.0",
-    "node-sass": "^4.5.2"
+    "eslint-plugin-react": "6.9.0"
   }
 }
