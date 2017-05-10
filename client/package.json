@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "create-react-class": "^15.5.2",
+    "eslint": "^3.19.0",
     "firebase": "^3.7.6",
     "material-ui": "^0.18.0",
     "node-sass": "^4.5.2",
@@ -11,10 +11,10 @@
     "react": "^15.5.3",
     "react-dom": "^15.5.3",
     "react-router-dom": "^4.0.0",
+    "react-scripts": "^0.9.5",
     "react-tap-event-plugin": "^2.0.1"
   },
   "devDependencies": {
-    "custom-react-scripts": "0.0.23",
     "enzyme": "^2.8.2",
     "npm-run-all": "^4.0.2",
     "react-test-renderer": "^15.5.4"
@@ -28,6 +28,5 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "postinstall": "npm run build"
-
   }
 }
