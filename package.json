@@ -18,7 +18,7 @@
     "server": "babel-node server.js",
     "client": "babel-node start-client.js",
     "lint": "eslint .",
-    "setup": "concurrently \"npm run --prefix client build\" \"npm run server.js\""
+    "postinstall": "npm run --prefix client install"
   },
   "devDependencies": {
     "concurrently": "3.1.0",
