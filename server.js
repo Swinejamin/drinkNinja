@@ -8,10 +8,11 @@ app.set('port', (process.env.PORT || 3001));
 
 // Express only serves static assets in production
 if (process.env.NODE_ENV === 'production') {
-    // app.use(express.static('client/build'));
-    // app.get('*', (req, res) => {
-    //     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-    // });
+    app.use(express.static('client/build'));
+    app.get('*', (req, res) => {
+        console.log(__dirname);
+        res.sendFile( 'index.html');
+    });
 }
 
 app.listen(app.get('port'), () => {
