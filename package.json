@@ -11,14 +11,15 @@
     "fs": "0.0.2"
   },
   "engines": {
-  "node":  "7.1.0"
+    "node": "7.1.0",
+    "npm": "3.10.9"
   },
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "server": "babel-node server.js",
     "client": "babel-node start-client.js",
     "lint": "eslint .",
-    "postinstall": "npm run --prefix client install"
+    "postinstall": "npm run --prefix ./client install ./client"
   },
   "devDependencies": {
     "concurrently": "3.1.0",
