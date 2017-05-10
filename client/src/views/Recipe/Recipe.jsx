@@ -3,6 +3,7 @@ import React from 'react';
 import RecipeTemplate from '../../components/Recipes/RecipeTemplate';
 // import {Link} from 'react-router';
 import {database} from '../../config/database';
+import PropTypes from 'prop-types';
 import './recipe.css';
 
 class Recipe extends React.Component {
@@ -61,7 +62,6 @@ class Recipe extends React.Component {
     render() {
         return (
             <div className="Recipe-Wrapper">
-
                 <RecipeTemplate title={this.state.recipe.title}
                                 ingredients={this.state.recipe.ingredientList}
                                 steps={this.state.recipe.stepsList}
@@ -75,6 +75,8 @@ class Recipe extends React.Component {
         );
     }
 }
-
+Recipe.PropTypes = {
+    match: PropTypes.object.isRequired
+}
 
 export default Recipe;
