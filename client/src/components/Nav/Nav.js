@@ -7,7 +7,9 @@ import MenuItem from 'material-ui/MenuItem';
 
 import styles from './nav.sass'
 
-import RaisedButton from 'material-ui/RaisedButton';
+// import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
+import AppBar from 'material-ui/AppBar';
 
 import {auth} from '../../config/database'
 
@@ -21,11 +23,14 @@ class Nav extends React.Component {
 
     render() {
         const closer = this.props.handleClose;
-        const LoginButton = withRouter(({ history }) => (
-            <RaisedButton
+        const LoginButton = withRouter(({history}) => (
+            <FlatButton
+                style={{position: 'absolute', bottom: '5rem', textAlign: 'center', width: '100%'}}
+                fullWidth={true}
+                secondary={true}
                 label="Log Out"
-                onTouchTap={function(){
-                    auth.signOut().then(function(){
+                onTouchTap={function () {
+                    auth.signOut().then(function () {
                         history.push('/login');
                         closer();
                     });
@@ -34,8 +39,9 @@ class Nav extends React.Component {
 
         return (
             <nav className={styles.nav}>
-                <Drawer open={this.props.open}>
-                    <LoginButton/>
+                <Drawer open={this.props.open} width={300} docked={false}
+                        onRequestChange={(open) => this.setState({open})}>
+                    <AppBar onLeftIconButtonTouchTap={this.handleClose}/>
                     {this.props.routes.map((route, index) => {
                         return (
 
@@ -45,6 +51,7 @@ class Nav extends React.Component {
 
                         )
                     })}
+                    <LoginButton/>
                 </Drawer>
 
             </nav>

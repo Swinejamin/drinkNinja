@@ -3,9 +3,9 @@ import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'mat
 import {List} from 'material-ui/List';
 // import Subheader from 'material-ui/Subheader';
 import {Tabs, Tab} from 'material-ui/Tabs';
-import Paper from 'material-ui/Paper';
+// import Paper from 'material-ui/Paper';
 // import Toggle from 'material-ui/Toggle';
-import CircularProgress from 'material-ui/CircularProgress';
+import {database} from '../../config/database'
 import PropTypes from 'prop-types';
 
 // import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
@@ -26,6 +26,27 @@ class RecipeTemplate extends React.Component {
     }
 
     componentWillMount() {
+        const comp = this;
+        database.ref('recipes').on('value', function (snap) {
+            comp.setState({
+                recipes: snap.val()
+            });
+        });
+        database.ref('ingredients').on('value', (snap) => {
+            comp.setState({
+                masterIngredients: snap.val()
+            });
+        });
+        database.ref('units').on('value', (snap) => {
+            comp.setState({
+                masterUnits: snap.val()
+            });
+        });
+        database.ref('tags').on('value', (snap) => {
+            comp.setState({
+                masterTags: snap.val()
+            });
+        });
         this.setState({
             emptyIngredients: this.props.ingredients.length <= 0,
             emptySteps: this.props.steps.length <= 0,
@@ -48,106 +69,61 @@ class RecipeTemplate extends React.Component {
         const imgUrl = this.props.imgUrl;
         const editing = this.props.editing;
         return (
-            <Paper itemScope itemType="http://schema.org/Recipe">
-                <Card style={{maxWidth: 800}} expanded={imgUrl.length > 1}>
-                    <CardHeader
-                        title={this.props.title}
-                        subtitle={this.props.description}
-                    />
-                    <CardMedia expandable={true}>
-                        <img src={imgUrl} alt={this.props.title}/>
-                    </CardMedia>
-                    <CardTitle title={this.props.authorName || 'Author unknown'}
-                               subtitle={this.props.source || 'Source unknown'}/>
-                    <CardText>
-                        <Tabs>
-                            <Tab label="Ingredients">
-                                <List>
-                                    {//(this.props.masterUnits.length < 2 ?
-                                        //        () => {
-                                        //            return (
-                                        //                <CircularProgress size={2}/>
-                                        //            );
-                                        //        } :
-                                        //        () => {
-                                        //            return (
-                                        //                ingredients.map((ingredient, index) => {
-                                        //                    return (
-                                        //                        <RecipeListItem key={index} index={index}
-                                        //                                        removeItem={this.handleRemoveIngredient}
-                                        //                                        content={ingredient}
-                                        //                                        type={'ingredient'}
-                                        //                                        ignore={false}
-                                        //                                        editing={editing}
-                                        //                                        masterIngredients={this.props.masterIngredients}
-                                        //                                        masterTags={this.props.masterTags}
-                                        //                                        masterUnits={this.props.masterUnits}/>
-                                        //                    );
-                                        //                })
-                                        //            );
-                                        //        }
-                                        //)()
-                                        ingredients.map((ingredient, index) => {
-                                            return (
-                                                <RecipeListItem key={index} index={index}
-                                                                removeItem={this.handleRemoveIngredient}
-                                                                content={ingredient}
-                                                                type={'ingredient'}
-                                                                ignore={false}
-                                                                editing={editing}
-                                                                masterIngredients={this.props.masterIngredients}
-                                                                masterTags={this.props.masterTags}
-                                                                masterUnits={this.props.masterUnits}/>
-                                            );
-                                        })
-                                    }
-                                </List>
-                            </Tab>
-                            <Tab label="steps">
-                                <List>
-                                    {(this.state.emptySteps ?
-                                            () => {
-                                                const fake = {
-                                                    text: 'Step 1',
-                                                    key: 0,
-                                                };
-                                                return (
-                                                    <RecipeListItem key={fake.key} index={0}
-                                                                    removeItem={this.handleRemoveStep}
-                                                                    content={fake}
-                                                                    type={'step'} ignore={true}
-                                                                    editing={editing}
-                                                                    masterIngredients={this.props.masterIngredients}
-                                                                    masterTags={this.props.masterTags}
-                                                                    masterUnits={this.props.masterUnits}/>
-                                                );
-                                            } :
-                                            () => {
-                                                return (
-                                                    steps.map((step, index) => {
-                                                        return (
-                                                            <RecipeListItem key={index} index={index}
-                                                                            content={step}
-                                                                            ignore={false}
-                                                                            removeItem={this.handleRemoveStep}
-                                                                            type={'step'}
-                                                                            editing={editing}
-                                                                            masterIngredients={this.props.masterIngredients}
-                                                                            masterTags={this.props.masterTags}
-                                                                            masterUnits={this.props.masterUnits}/>
-                                                        );
-                                                    })
-                                                );
-                                            }
-                                    )()}
-                                </List>
-                            </Tab>
-                        </Tabs>
-                    </CardText>
-                    <CardActions>
-                    </CardActions>
-                </Card>
-            </Paper>
+
+            <Card itemScope itemType="http://schema.org/Recipe" style={{maxWidth: 800, margin: '0 auto'}}
+                  expanded={imgUrl.length > 1}>
+                <CardHeader
+                    title={this.props.title}
+                    subtitle={this.props.description}
+                />
+                <CardMedia expandable={true}>
+                    <img src={imgUrl} alt={this.props.title}/>
+                </CardMedia>
+                <CardTitle title={this.props.authorName || 'Author unknown'}
+                           subtitle={this.props.source || 'Source unknown'}/>
+                <CardText>
+                    <Tabs>
+                        <Tab label="Ingredients">
+                            <List>
+                                {
+                                    ingredients.map((ingredient, index) => {
+                                        return (
+                                            <RecipeListItem key={index} index={index}
+                                                            removeItem={this.handleRemoveIngredient}
+                                                            content={ingredient}
+                                                            type={'ingredient'}
+                                                            ignore={false}
+                                                            editing={editing}
+                                                            masterIngredients={this.state.masterIngredients}
+                                                            masterTags={this.state.masterTags}
+                                                            masterUnits={this.state.masterUnits}/>
+                                        );
+                                    })
+                                }
+                            </List>
+                        </Tab>
+                        <Tab label="steps">
+                            <List>
+                                {steps.map((step, index) => {
+                                    return (
+                                        <RecipeListItem key={index} index={index}
+                                                        removeItem={this.handleRemoveIngredient}
+                                                        content={step}
+                                                        type={'step'}
+                                                        ignore={true}
+                                                        editing={editing}
+                                                        masterIngredients={this.state.masterIngredients}
+                                                        masterTags={this.state.masterTags}
+                                                        masterUnits={this.state.masterUnits}/>
+                                    );
+                                })}
+                            </List>
+                        </Tab>
+                    </Tabs>
+                </CardText>
+                <CardActions>
+                </CardActions>
+            </Card>
         );
     }
 }
@@ -161,9 +137,9 @@ RecipeTemplate.propTypes = {
     imgUrl: PropTypes.string,
     authorName: PropTypes.string,
     source: PropTypes.string,
-    masterIngredients: PropTypes.object.isRequired,
-    masterTags: PropTypes.object.isRequired,
-    masterUnits: PropTypes.object.isRequired,
+    // masterIngredients: PropTypes.object.isRequired,
+    // masterTags: PropTypes.object.isRequired,
+    // masterUnits: PropTypes.object.isRequired,
 };
 
 export default RecipeTemplate;

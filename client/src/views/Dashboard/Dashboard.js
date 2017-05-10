@@ -25,7 +25,7 @@ class Dashboard extends React.Component {
 
     componentWillMount() {
         this.setState({
-            uid: auth.currentUser.uid
+            uid: auth && auth.currentUser ? auth.currentUser.uid : null
         });
 
     }
@@ -37,7 +37,7 @@ class Dashboard extends React.Component {
     }
 
     handleAddIngredient(newIngredient) {
-        console.log(newIngredient)
+        console.log(newIngredient);
         const key = newIngredient.key;
         const data = {};
         data[key['name']] = newIngredient.value;

@@ -1,18 +1,21 @@
 import React from 'react';
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import routes from './config/routes';
 import './App.scss';
 import Nav from './components/Nav/Nav'
 import {auth} from './config/database';
 import Login from './views/Login/LoginForm';
 import Recipe from './views/Recipe/Recipe';
-import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
+// import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Paper from 'material-ui/Paper';
+// import FlatButton from 'material-ui/FlatButton';
+import AppBar from 'material-ui/AppBar';
+import theme from './config/theme';
 
 
-import RaisedButton from 'material-ui/RaisedButton';
+// import RaisedButton from 'material-ui/RaisedButton';
 
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -32,23 +35,37 @@ class App extends React.Component {
         this.state = {open: false};
     }
 
+    componentWillMount() {
+        const comp = this;
+        auth.onAuthStateChanged(function handleAuthChange() {
+            if (auth.currentUser) {
+                comp.setState({
+                    loggedIn: true
+                });
+            } else {
+                comp.setState({
+                    loggedIn: false
+                });
+            }
+        })
+    }
+
     handleDrawerToggle = () => this.setState({open: !this.state.open});
 
     handleDrawerClose = () => {
         this.setState({open: false});
-    }
+    };
 
     render() {
         return (
 
-            <Router>
-                <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+            <BrowserRouter>
+                <MuiThemeProvider muiTheme={getMuiTheme(theme)}>
                     <Paper>
                         <div className="App">
-                            <RaisedButton
-                                label="Toggle Drawer"
-                                onTouchTap={this.handleDrawerToggle}
-                            />
+                            <AppBar title="The Drink Ninja" style={{position: 'fixed', top: 0}}
+                                    onTitleTouchTap={this.handleTitleTap}
+                                    onLeftIconButtonTouchTap={this.handleDrawerToggle}/>
 
                             <Nav routes={routes} open={this.state.open} handleClose={this.handleDrawerClose}/>
 
@@ -78,7 +95,7 @@ class App extends React.Component {
                         </div>
                     </Paper>
                 </MuiThemeProvider>
-            </Router >
+            </BrowserRouter >
         )
     }
 }

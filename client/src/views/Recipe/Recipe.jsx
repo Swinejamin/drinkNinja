@@ -1,5 +1,5 @@
 import React from 'react';
-import Paper from 'material-ui/Paper';
+// import Paper from 'material-ui/Paper';
 import RecipeTemplate from '../../components/Recipes/RecipeTemplate';
 // import {Link} from 'react-router';
 import {database} from '../../config/database';
@@ -36,7 +36,7 @@ class Recipe extends React.Component {
         };
     }
 
-    componentDidMount() {
+    componentWillMount() {
         const comp = this;
         const recipeStr = `recipes/${this.props.match.params.id}`;
         const recipeRef = database.ref(recipeStr);
@@ -61,20 +61,16 @@ class Recipe extends React.Component {
     render() {
         return (
             <div className="Recipe-Wrapper">
-                <Paper className="Recipe__paper">
-                    <RecipeTemplate title={this.state.recipe.title}
-                                    ingredients={this.state.recipe.ingredientList}
-                                    steps={this.state.recipe.stepsList}
-                                    description={this.state.recipe.description || ''}
-                                    editing={false}
-                                    imgUrl={this.state.recipe.imgUrl || ''}
-                                    authorName={this.state.recipe.author || ''}
-                                    source={this.state.recipe.source}
-                                    masterIngredients={this.state.ingredients}
-                                    masterTags={database.ref('tags')}
-                                    masterUnits={this.state.units}
-                    />
-                </Paper>
+
+                <RecipeTemplate title={this.state.recipe.title}
+                                ingredients={this.state.recipe.ingredientList}
+                                steps={this.state.recipe.stepsList}
+                                description={this.state.recipe.description || ''}
+                                editing={false}
+                                imgUrl={this.state.recipe.imgUrl || ''}
+                                authorName={this.state.recipe.author || ''}
+                                source={this.state.recipe.source}
+                                masterIngredients={this.state.ingredients}/>
             </div>
         );
     }

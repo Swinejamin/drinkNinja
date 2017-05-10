@@ -29,48 +29,42 @@ class RecipeListItem extends React.Component {
     render() {
         const disabled = this.props.ignore;
         const editing = this.props.editing;
+        const rightBtn = (editing ?
+                () => (
+                    <IconButton
+                        touch={true}
+                        tooltip="remove"
+                        tooltipPosition="bottom-right"
+                        onClick={this.handleRemoveItem}
+                        disabled={disabled}>
+                        <ActionDelete />
+                    </IconButton>
+                ) :
+                () => {
 
+                    return null;
+                }
+        )()
+            const ingredient = this.props.content.ingredient;
         if (this.props.type === 'ingredient') {
             const unit = this.props.content.unit;
-            const ingredient = this.props.content.ingredient;
+            const text = `${this.props.content.amount} ${this.props.content.amount > 1 ? this.props.masterUnits[unit].plural : this.props.masterUnits[unit].single} ${this.state.masterIngredients[ingredient].name}`;
             return (
                 <ListItem itemProp="recipeIngredient"
-                          rightIconButton={ (editing ?
-                                  () => (
-                                      <IconButton
-                                          touch={true}
-                                          tooltip="remove"
-                                          tooltipPosition="bottom-right"
-                                          onClick={this.handleRemoveItem}
-                                          disabled={disabled}
-                                      >
-                                          <ActionDelete />
-                                      </IconButton>
-                                  ) :
-                                  () => {
-                                      return;
-                                  }
-                          )()}>
-                    <span>{this.props.content.amount} </span>
-                    <span>{this.props.content.amount > 1 ? this.state.masterUnits[unit].plural : this.state.masterUnits[unit].single} </span>
-                    <span>{this.state.masterIngredients[ingredient].name}</span>
+                          primaryText={text}
+                          rightIconButton={ rightBtn}>
+
                 </ListItem> );
         } else {
+            const text = `${this.props.content.text}`;
             return (
                 <ListItem itemProp="recipeInstructions"
-                          rightIconButton={
-                              <IconButton
-                                  touch={true}
-                                  tooltip="remove"
-                                  tooltipPosition="bottom-right"
-                                  onClick={this.handleRemoveItem}
-                                  disabled={disabled}
-                              >
-                                  <ActionDelete />
-                              </IconButton>}>
-                    <span>{this.props.content.text} </span>
+                          primaryText={text}
+                          rightIconButton={ rightBtn}>
+
                 </ListItem>
-            );
+            )
+                ;
         }
     }
 }
