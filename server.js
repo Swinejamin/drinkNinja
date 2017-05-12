@@ -17,7 +17,6 @@ if (process.env.NODE_ENV === 'production') {
                 console.log(file);
             });
         });
-        console.log(__dirname);
         res.sendFile(target + '/index.html');
     });
 }
