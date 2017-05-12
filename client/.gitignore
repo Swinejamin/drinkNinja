@@ -16,4 +16,4 @@ npm-debug.log
 
 # styles
 src/**/*.css*
-
+!index.css
