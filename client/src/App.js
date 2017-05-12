@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter, Route, Switch, withRouter} from 'react-router-dom';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import routes from './config/routes';
 import './App.scss';
 import Nav from './components/Nav/Nav'

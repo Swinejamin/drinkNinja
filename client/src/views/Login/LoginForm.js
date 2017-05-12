@@ -9,55 +9,6 @@ import {auth} from '../../config/database';
 import PropTypes from 'prop-types';
 
 
-// const LoginForm = withRouter(
-//     () => ({
-//         propTypes: {
-//             location: React.PropTypes.object.isRequired,
-//             router: React.PropTypes.object.isRequired
-//         },
-//         getInitialState() {
-//             return {email: '', password: '', emailError: '', passwordError: ''};
-//         },
-//         handleEmailChange(e) {
-//             this.setState({email: e.target.value});
-//         },
-//         handlePasswordChange(e) {
-//             this.setState({password: e.target.value});
-//         },
-//         handleSubmit(event) {
-//             event.preventDefault();
-//             const email = this.state.email.trim();
-//             const password = this.state.password.trim();
-//             auth.login(email, password, this.handleLoginSuccess, this.handleLoginFailure);
-//         },
-//         handleAnon(event) {
-//             event.preventDefault();
-//             auth.loginAnonymously(this.handleLoginSuccess, this.handleLoginFailure);
-//         },
-//         handleLoginFailure(error) {
-//             return this.setState({
-//                 emailError: error.emailError,
-//                 passwordError: error.passwordError
-//             });
-//         },
-//         handleLoginSuccess() {
-//             const {location} = this.props;
-//             const router = this.props.router;
-//             if (location.state && location.state.nextPathname) {
-//                 console.log(router);
-//                 console.log('replacing path with ' + location.state.nextPathname + ' as requested');
-//                 // browserHistory.push(location.state.nextPathname);
-//                 router.replace(location.state.nextPathname);
-//             } else {
-//                 console.log('replacing path with \'/\'');
-//                 // browserHistory.push('/dashboard');
-//                 router.replace('dashboard');
-//             }
-//         },
-
-// }));
-
-
 class Login extends React.Component {
     constructor(props) {
         super(props);
