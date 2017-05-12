@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {BrowserRouter, Route, Switch, withRouter} from 'react-router-dom';
 import routes from './config/routes';
 import './App.scss';
 import Nav from './components/Nav/Nav'
@@ -71,7 +71,7 @@ class App extends React.Component {
 
                             <Switch>
                                 <Route path="/login" component={Login}/>
-                                <Route path="/recipe/:id" component={Recipe}/>
+                                <Route path="/recipe/:id" component={Recipe}/>)
                                 {routes.map((route, index) => (
                                         route.private ?
                                             <AuthRoute key={index} exact={route.exact} path={route.path}
@@ -81,6 +81,7 @@ class App extends React.Component {
                                     )
                                 )}
                             </Switch>
+
 
                             {auth && auth.currentUser && auth.currentUser.isAdmin ?
                                 <Switch>
