@@ -1,25 +1,12 @@
 import React from 'react';
 // import Paper from 'material-ui/Paper';
 import RecipeTemplate from '../../components/Recipes/RecipeTemplate';
-// import {Link} from 'react-router';
+// import {withRouter} from 'react-router-dom';
 import {database} from '../../config/database';
 import PropTypes from 'prop-types';
 import './recipe.css';
 
 class Recipe extends React.Component {
-    // getInitialState() {
-    //     return {
-    //         recipe: {
-    //             title: '',
-    //             ingredientList: [],
-    //             stepsList: [],
-    //             image: {
-    //                 url: '',
-    //                 portrait: true
-    //             }
-    //         }
-    //     };
-    // }
     constructor(props) {
         super(props);
         this.state = {
