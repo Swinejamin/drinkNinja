@@ -50,6 +50,10 @@ class App extends React.Component {
         })
     }
 
+    handleTitleTap() {
+        // history.push('/')
+    }
+
     handleDrawerToggle = () => this.setState({open: !this.state.open});
 
     handleDrawerClose = () => {
@@ -81,18 +85,6 @@ class App extends React.Component {
                                     )
                                 )}
                             </Switch>
-
-
-                            {auth && auth.currentUser && auth.currentUser.isAdmin ?
-                                <Switch>
-                                    {routes.map((route, index) => {
-                                        return (
-                                            <AdminRoute key={index} {...route}/>
-                                        )
-                                    })}
-                                </Switch> :
-                                ''
-                            }
                         </div>
                     </Paper>
                 </MuiThemeProvider>
