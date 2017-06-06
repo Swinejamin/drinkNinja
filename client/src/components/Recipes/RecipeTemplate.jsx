@@ -1,7 +1,7 @@
 import React from 'react';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import {List} from 'material-ui/List';
-// import Subheader from 'material-ui/Subheader';
+import CircularProgress from 'material-ui/CircularProgress';
 import {Tabs, Tab} from 'material-ui/Tabs';
 // import Paper from 'material-ui/Paper';
 // import Toggle from 'material-ui/Toggle';
@@ -17,35 +17,52 @@ class RecipeTemplate extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            loaded: false,
             expanded: true,
             emptyIngredients: this.props.ingredients.length <= 0,
             emptySteps: this.props.steps.length <= 0,
             emptyTitle: this.props.title.length <= 0,
-            emptyDescription: this.props.description.length <= 0
+            emptyDescription: this.props.description.length <= 0,
+            masterUnits: {},
+            masterIngredients: {}
+
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         const comp = this;
+        let loaded = 0;
+        function checkLoaded(){
+            loaded +=1;
+            if (loaded >= 4) {
+                comp.setState({
+                    loaded: true
+                })
+            }
+        }
         database.ref('recipes').on('value', function (snap) {
             comp.setState({
                 recipes: snap.val()
             });
+            checkLoaded();
         });
         database.ref('ingredients').on('value', (snap) => {
             comp.setState({
                 masterIngredients: snap.val()
             });
+            checkLoaded();
         });
         database.ref('units').on('value', (snap) => {
             comp.setState({
                 masterUnits: snap.val()
             });
+            checkLoaded();
         });
         database.ref('tags').on('value', (snap) => {
             comp.setState({
                 masterTags: snap.val()
             });
+            checkLoaded();
         });
         this.setState({
             emptyIngredients: this.props.ingredients.length <= 0,
@@ -70,60 +87,66 @@ class RecipeTemplate extends React.Component {
         const editing = this.props.editing;
         return (
 
-            <Card itemScope itemType="http://schema.org/Recipe" style={{maxWidth: 800, margin: '0 auto'}}
-                  expanded={imgUrl.length > 1}>
-                <CardHeader
-                    title={this.props.title}
-                    subtitle={this.props.description}
-                />
-                <CardMedia expandable={true}>
-                    <img src={imgUrl} alt={this.props.title}/>
-                </CardMedia>
-                <CardTitle title={this.props.authorName || 'Author unknown'}
-                           subtitle={this.props.source || 'Source unknown'}/>
-                <CardText>
-                    <Tabs>
-                        <Tab label="Ingredients">
-                            <List>
-                                {
-                                    ingredients.map((ingredient, index) => {
+            this.state.loaded ?
+                <Card itemScope itemType="http://schema.org/Recipe" style={{maxWidth: 800, margin: '0 auto'}}
+                      expandable>
+                    <CardHeader
+                        title={this.props.title}
+                        subtitle={this.props.description}
+                        actAsExpander
+                    />
+                    <CardMedia expandable={true}>
+                        <img src={imgUrl} alt={this.props.title}/>
+                    </CardMedia>
+                    <CardTitle title={this.props.authorName || 'Author unknown'}
+                               subtitle={this.props.source || 'Source unknown'}/>
+                    <CardText>
+                        <Tabs>
+                            <Tab label="Ingredients">
+                                <List>
+                                    {
+                                        ingredients.map((ingredient, index) => {
+                                            return (
+                                                <RecipeListItem key={index} index={index}
+                                                                removeItem={this.handleRemoveIngredient}
+                                                                content={ingredient}
+                                                                type={'ingredient'}
+                                                                ignore={false}
+                                                                editing={editing}
+                                                                masterIngredients={this.state.masterIngredients}
+                                                                masterTags={this.state.masterTags}
+                                                                masterUnits={this.state.masterUnits}/>
+                                            );
+                                        })
+                                    }
+                                </List>
+                            </Tab>
+                            <Tab label="steps">
+                                <List>
+                                    {steps.map((step, index) => {
                                         return (
                                             <RecipeListItem key={index} index={index}
                                                             removeItem={this.handleRemoveIngredient}
-                                                            content={ingredient}
-                                                            type={'ingredient'}
-                                                            ignore={false}
+                                                            content={step}
+                                                            type={'step'}
+                                                            ignore={true}
                                                             editing={editing}
                                                             masterIngredients={this.state.masterIngredients}
                                                             masterTags={this.state.masterTags}
                                                             masterUnits={this.state.masterUnits}/>
                                         );
-                                    })
-                                }
-                            </List>
-                        </Tab>
-                        <Tab label="steps">
-                            <List>
-                                {steps.map((step, index) => {
-                                    return (
-                                        <RecipeListItem key={index} index={index}
-                                                        removeItem={this.handleRemoveIngredient}
-                                                        content={step}
-                                                        type={'step'}
-                                                        ignore={true}
-                                                        editing={editing}
-                                                        masterIngredients={this.state.masterIngredients}
-                                                        masterTags={this.state.masterTags}
-                                                        masterUnits={this.state.masterUnits}/>
-                                    );
-                                })}
-                            </List>
-                        </Tab>
-                    </Tabs>
-                </CardText>
-                <CardActions>
-                </CardActions>
-            </Card>
+                                    })}
+                                </List>
+                            </Tab>
+                        </Tabs>
+                    </CardText>
+                    <CardActions>
+                    </CardActions>
+                </Card> :
+                <CircularProgress size={100} thickness={10} style={{position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}/>
+
+
+
         );
     }
 }

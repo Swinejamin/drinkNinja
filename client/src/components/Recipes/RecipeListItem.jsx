@@ -7,17 +7,19 @@ import ActionDelete from 'material-ui/svg-icons/action/delete';
 import PropTypes from 'prop-types';
 
 class RecipeListItem extends React.Component {
-    // constructor(props) {
-    //     super(props);
-    //
-    // }
+    constructor(props) {
+        super(props);
+        this.state= {
+            loaded: false
+        }
+    }
 
     handleRemoveItem(e) {
         e.preventDefault();
         this.props.removeItem(this.props.index);
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.setState({
             masterIngredients: this.props.masterIngredients,
             masterUnits: this.props.masterUnits
@@ -48,7 +50,18 @@ class RecipeListItem extends React.Component {
             const ingredient = this.props.content.ingredient;
         if (this.props.type === 'ingredient') {
             const unit = this.props.content.unit;
-            const text = `${this.props.content.amount} ${this.props.content.amount > 1 ? this.props.masterUnits[unit].plural : this.props.masterUnits[unit].single} ${this.state.masterIngredients[ingredient].name}`;
+            let text = '';
+            if(this.props.content.amount > 1){
+                const amt = this.props.content.amount;
+                const pl = this.props.masterUnits[unit].plural;
+                const nm = this.props.masterIngredients[ingredient].name;
+                text = `${amt} ${pl} ${nm}`;
+            } else {
+                const amt = this.props.content.amount;
+                const pl = this.props.masterUnits[unit].single;
+                const nm = this.props.masterIngredients[ingredient].name;
+                text = `${amt} ${pl} ${nm}`;
+            }
             return (
                 <ListItem itemProp="recipeIngredient"
                           primaryText={text}
@@ -75,9 +88,9 @@ RecipeListItem.propTypes = {
     content: PropTypes.object.isRequired,
     ignore: PropTypes.bool.isRequired,
     editing: PropTypes.bool.isRequired,
-    // masterIngredients: PropTypes.object.isRequired,
+    masterIngredients: PropTypes.object.isRequired,
     // masterTags: PropTypes.object.isRequired,
-    // masterUnits: PropTypes.object.isRequired,
+    masterUnits: PropTypes.object.isRequired,
 };
 
 
