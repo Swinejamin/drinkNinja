@@ -2,7 +2,7 @@ import React from 'react';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import routes from './config/routes';
 import './App.scss';
-import Nav from './components/Nav/Nav'
+// import Nav from './components/Nav/Nav'
 import {auth} from './config/database';
 import Login from './views/Login/LoginForm';
 import Recipe from './views/Recipe/Recipe';
