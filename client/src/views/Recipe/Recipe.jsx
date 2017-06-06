@@ -24,7 +24,7 @@ class Recipe extends React.Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         const comp = this;
         const recipeStr = `recipes/${this.props.match.params.id}`;
         const recipeRef = database.ref(recipeStr);
