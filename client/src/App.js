@@ -24,7 +24,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
 
-import {AdminRoute, AuthRoute} from './utilities/PrivateRoutes'
+import {AuthRoute} from './utilities/PrivateRoutes'
 
 // import styles from './components/Nav/nav.css';
 class App extends React.Component {
@@ -65,13 +65,13 @@ class App extends React.Component {
 
             <BrowserRouter>
                 <MuiThemeProvider muiTheme={getMuiTheme(theme)}>
-                    <Paper>
+                    <Paper style={{paddingTop: '4rem', minHeight: '100vh'}}>
                         <div className="App">
                             <AppBar title="The Drink Ninja" style={{position: 'fixed', top: 0}}
                                     onTitleTouchTap={this.handleTitleTap}
                                     onLeftIconButtonTouchTap={this.handleDrawerToggle}/>
 
-                            <Nav routes={routes} open={this.state.open} handleClose={this.handleDrawerClose}/>
+                            {/*<Nav routes={routes} open={this.state.open} handleClose={this.handleDrawerClose}/>*/}
 
                             <Switch>
                                 <Route path="/login" component={Login}/>
