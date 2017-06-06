@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 
 // import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 
-import RecipeListItem from './RecipeListItem';
+// import RecipeListItem from './RecipeListItem';
 
 class RecipeTemplate extends React.Component {
 
@@ -87,63 +87,7 @@ class RecipeTemplate extends React.Component {
         const editing = this.props.editing;
         return (
 
-            this.state.loaded ?
-                <Card itemScope itemType="http://schema.org/Recipe" style={{maxWidth: 800, margin: '0 auto'}}
-                      expandable>
-                    <CardHeader
-                        title={this.props.title}
-                        subtitle={this.props.description}
-                        actAsExpander
-                    />
-                    <CardMedia expandable={true}>
-                        <img src={imgUrl} alt={this.props.title}/>
-                    </CardMedia>
-                    <CardTitle title={this.props.authorName || 'Author unknown'}
-                               subtitle={this.props.source || 'Source unknown'}/>
-                    <CardText>
-                        <Tabs>
-                            <Tab label="Ingredients">
-                                <List>
-                                    {
-                                        ingredients.map((ingredient, index) => {
-                                            return (
-                                                <RecipeListItem key={index} index={index}
-                                                                removeItem={this.handleRemoveIngredient}
-                                                                content={ingredient}
-                                                                type={'ingredient'}
-                                                                ignore={false}
-                                                                editing={editing}
-                                                                masterIngredients={this.state.masterIngredients}
-                                                                masterTags={this.state.masterTags}
-                                                                masterUnits={this.state.masterUnits}/>
-                                            );
-                                        })
-                                    }
-                                </List>
-                            </Tab>
-                            <Tab label="steps">
-                                <List>
-                                    {steps.map((step, index) => {
-                                        return (
-                                            <RecipeListItem key={index} index={index}
-                                                            removeItem={this.handleRemoveIngredient}
-                                                            content={step}
-                                                            type={'step'}
-                                                            ignore={true}
-                                                            editing={editing}
-                                                            masterIngredients={this.state.masterIngredients}
-                                                            masterTags={this.state.masterTags}
-                                                            masterUnits={this.state.masterUnits}/>
-                                        );
-                                    })}
-                                </List>
-                            </Tab>
-                        </Tabs>
-                    </CardText>
-                    <CardActions>
-                    </CardActions>
-                </Card> :
-                <CircularProgress size={100} thickness={10} style={{position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}/>
+            <div></div>
 
 
 

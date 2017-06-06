@@ -1,5 +1,9 @@
+@import './styles/mixins.scss';
+
 .App {
-  min-height: 100vh;
-  overflow: scroll;
-  padding-top: 6.4rem;
+  //min-height: 100vh;
+  @include container;
+  //overflow: scroll;
+  padding-bottom: 6.4rem;
+  padding-top: 4rem;
 }

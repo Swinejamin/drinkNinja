@@ -1,7 +1,7 @@
 import React from 'react';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import routes from './config/routes';
-import './App.scss';
+import './App.css';
 // import Nav from './components/Nav/Nav'
 import {auth} from './config/database';
 import Login from './views/Login/LoginForm';
@@ -65,27 +65,32 @@ class App extends React.Component {
 
             <BrowserRouter>
                 <MuiThemeProvider muiTheme={getMuiTheme(theme)}>
-                    <Paper style={{paddingTop: '4rem', minHeight: '100vh'}}>
+                    <Paper style={{minHeight: '100vh'}}>
+
+
+                        <AppBar title="The Drink Ninja" style={{position: 'fixed', top: 0}}
+                                onTitleTouchTap={this.handleTitleTap}
+                                onLeftIconButtonTouchTap={this.handleDrawerToggle}/>
                         <div className="App">
-                            <AppBar title="The Drink Ninja" style={{position: 'fixed', top: 0}}
-                                    onTitleTouchTap={this.handleTitleTap}
-                                    onLeftIconButtonTouchTap={this.handleDrawerToggle}/>
 
-                            {/*<Nav routes={routes} open={this.state.open} handleClose={this.handleDrawerClose}/>*/}
 
-                            <Switch>
-                                <Route path="/login" component={Login}/>
-                                <Route path="/recipe/:id" component={Recipe}/>)
-                                {routes.map((route, index) => (
-                                        route.private ?
-                                            <AuthRoute key={index} exact={route.exact} path={route.path}
-                                                       component={route.main}/> :
-                                            <Route key={index} exact={route.exact} path={route.path}
-                                                   component={route.main}/>
-                                    )
-                                )}
-                            </Switch>
+                        {/*<Nav routes={routes} open={this.state.open} handleClose={this.handleDrawerClose}/>*/}
+
+                        <Switch>
+                            <Route path="/login" component={Login}/>
+                            <Route path="/recipe/:id" component={Recipe}/>)
+                            {routes.map((route, index) => (
+                                    route.private ?
+                                        <AuthRoute key={index} exact={route.exact} path={route.path}
+                                                   component={route.main}/> :
+                                        <Route key={index} exact={route.exact} path={route.path}
+                                               component={route.main}/>
+                                )
+                            )}
+                        </Switch>
                         </div>
+
+
                     </Paper>
                 </MuiThemeProvider>
             </BrowserRouter >
