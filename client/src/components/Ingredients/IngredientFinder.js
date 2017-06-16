@@ -1,6 +1,6 @@
 import React from'react';
 import AutoComplete from 'material-ui/AutoComplete';
-import TagListBuilder from '../TagListBuilder';
+// import TagList from '../Tags/TagList';
 import PropTypes from 'prop-types';
 const dataSourceConfig = {
     text: 'value',
@@ -8,9 +8,11 @@ const dataSourceConfig = {
 };
 
 class IngredientFinder extends React.Component {
-    getInitialState() {
-        return {
+    constructor(props) {
+        super(props);
+        this.state = {
             searchText: ''
+
         };
     }
 
@@ -52,22 +54,22 @@ class IngredientFinder extends React.Component {
 
 
     render() {
-        let masterList = _(this.props.masterList)
-            .keys()
+        let masterList = Object.keys(this.props.masterIngredients);
+        console.dir(masterList);
+        let testing = masterList
+            // .map((ingredientKey) => {
+            //     const cloned = {'value': this.props.masterIngredients[ingredientKey].name};
+            //     cloned.key = ingredientKey;
+            //     return cloned;
+            // })
+            // .sort(this.alphaByName);
+        console.dir(testing);
+        let userList = Object.keys(this.props.userList)
             .map((ingredientKey) => {
-                const cloned = {'value': _.clone(this.props.masterList[ingredientKey].name)};
+                const cloned = {'value': this.props.userList[ingredientKey].name};
                 cloned.key = ingredientKey;
                 return cloned;
-            })
-            .value().sort(this.alphaByName);
-        let userList = _(this.props.userList)
-            .keys()
-            .map((ingredientKey) => {
-                const cloned = {'value': _.clone(this.props.userList[ingredientKey].name)};
-                cloned.key = ingredientKey;
-                return cloned;
-            })
-            .value();
+            });
 
         masterList = masterList.filter((ingredient) => {
             return userList.filter((current_user) => {
@@ -85,23 +87,22 @@ class IngredientFinder extends React.Component {
                     onNewRequest={this.handleNewIngredient}
                     onUpdateInput={this.handleUpdateInput}
                 />
-                <TagListBuilder listSource={this.props.ingredientSource}
-                                click={this.props.click}
-                                remove={this.handleDelete}
-                                listHeader={this.props.listHeader} masterList={this.props.masterList}
-                                loading={this.props.loadingUser}/>
+                {/*<TagListBuilder listSource={this.props.userList}*/}
+                {/*click={this.props.click}*/}
+                {/*remove={this.handleDelete}*/}
+                {/*listHeader={this.props.listHeader} masterList={this.props.masterList}*/}
+                {/*loading={this.props.loadingUser}/>*/}
             </div>
         );
     }
 }
 IngredientFinder.propTypes = {
-    masterList: PropTypes.object.isRequired,
+    masterIngredients: PropTypes.object.isRequired,
     userList: PropTypes.object.isRequired,
     addIngredient: PropTypes.func.isRequired,
     searchHintText: PropTypes.string.isRequired,
     remove: PropTypes.func.isRequired,
-    ingredientSource: PropTypes.object.isRequired,
-    loadingUser: PropTypes.bool.isRequired
-}
+    // loadingUser: PropTypes.bool.isRequired
+};
 
 export default IngredientFinder;

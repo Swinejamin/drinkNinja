@@ -15,7 +15,7 @@ export const AuthRoute = ({component: Component, ...rest}) => {
             )
     )
     }/>)
-}
+};
 // const PrivateRoute = ({ component: Component, ...rest }) => (
 //     <Route {...rest} render={props => (
 //         fakeAuth.isAuthenticated ? (

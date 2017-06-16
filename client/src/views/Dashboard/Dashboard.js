@@ -3,7 +3,7 @@ import {auth, database} from '../../config/database'
 import {Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar';
 import CircularProgress from 'material-ui/CircularProgress';
 
-// import IngredientFinder from '../../components/Ingredients/IngredientFinder';
+import IngredientFinder from '../../components/Ingredients/IngredientFinder';
 import RecipeBrowser from '../../components/Recipes/RecipeBrowser';
 import './dashboard.scss';
 
@@ -29,7 +29,14 @@ class Dashboard extends React.Component {
         });
 
     }
-
+    componentDidMount() {
+        const comp = this;
+        database.ref(`users/${this.state.uid}/ingredients`).on('value', (snap)=>{
+            comp.setState({
+                ingredients: snap.val()
+            });
+        })
+    }
 
     clickIngredient(ingredient) {
         const target = database.ref(`users/${this.state.uid}/ingredients/${ingredient.key}/isFeatured`);
@@ -68,7 +75,14 @@ class Dashboard extends React.Component {
                             </ToolbarGroup>
                         </Toolbar>
                         {this.props.loadingUser ? (<CircularProgress size={5}/>) : (
-                                null
+                            <IngredientFinder id="IngredientFinder" masterIngredients={this.state.masterIngredients}
+                                              userList={this.state.ingredients}
+                                              addIngredient={this.handleAddIngredient}
+                                              searchHintText="Add ingredients to your cabinet"
+                                              listHeader='Your current ingredients'
+                                              ingredientSource={this.state.ingredients}
+                                              click={this.clickIngredient}
+                                              remove={this.removeTag} loadingUser={this.props.loadingIngredients}/>
                             )}
                     </div>
                     <div>

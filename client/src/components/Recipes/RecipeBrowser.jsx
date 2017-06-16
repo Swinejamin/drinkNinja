@@ -7,7 +7,8 @@ class RecipeBrowser extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            masterRecipes: []
+            masterRecipes: [],
+            potentialRecipes: []
         };
     }
 
@@ -62,5 +63,5 @@ class RecipeBrowser extends React.Component {
 RecipeBrowser.propTypes = {
     recipes: PropTypes.object.isRequired,
     userIngredients: PropTypes.object.isRequired
-}
+};
 export default RecipeBrowser;
