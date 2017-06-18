@@ -1,19 +1,33 @@
 import React from'react';
 import AutoComplete from 'material-ui/AutoComplete';
-// import TagList from '../Tags/TagList';
+import TagList from '../Tags/TagList';
 import PropTypes from 'prop-types';
 const dataSourceConfig = {
     text: 'value',
     value: 'key',
 };
+import {database} from '../../config/database';
+
 
 class IngredientFinder extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            searchText: ''
-
+            searchText: '',
+            ings: {},
+            loading: true
         };
+        this.handleNameChange = this.handleNameChange.bind(this);
+        this.handleTypeChange = this.handleTypeChange.bind(this);
+        this.handleNewIngredient = this.handleNewIngredient.bind(this);
+        // this.handleDelete = this.handleDelete.bind(this);
+        this.handleUpdateInput = this.handleUpdateInput.bind(this);
+    }
+
+    componentDidMount() {
+        this.setState({
+            ings: this.props.masterIngredients,
+        })
     }
 
     handleNameChange(e) {
@@ -24,13 +38,21 @@ class IngredientFinder extends React.Component {
         this.setState({ingredientType: e.target.value});
     }
 
-    handleNewIngredient(value) {
-        this.props.addIngredient(value);
+    handleNewIngredient(newIngredient) {
+        console.log(newIngredient);
+        const key = newIngredient.key;
+        const value = newIngredient.value;
+        const data = {};
+        data[key] = value;
+        database.ref(`users/${this.props.uid}/ingredients`).update(data);
         this.setState({
             searchText: ''
         });
     }
 
+    handleAddIngredient(newIngredient) {
+
+    }
 
     handleDelete(tag) {
         this.props.remove(tag);
@@ -55,26 +77,18 @@ class IngredientFinder extends React.Component {
 
     render() {
         let masterList = Object.keys(this.props.masterIngredients);
-        console.dir(masterList);
-        let testing = masterList
-            // .map((ingredientKey) => {
-            //     const cloned = {'value': this.props.masterIngredients[ingredientKey].name};
-            //     cloned.key = ingredientKey;
-            //     return cloned;
-            // })
-            // .sort(this.alphaByName);
-        console.dir(testing);
-        let userList = Object.keys(this.props.userList)
+        masterList = masterList
             .map((ingredientKey) => {
-                const cloned = {'value': this.props.userList[ingredientKey].name};
+                const cloned = {'value': this.props.masterIngredients[ingredientKey].name};
                 cloned.key = ingredientKey;
                 return cloned;
-            });
+            })
+            .sort(this.alphaByName);
+        // let userList = Object.keys(this.props.userList);
 
         masterList = masterList.filter((ingredient) => {
-            return userList.filter((current_user) => {
-                    return current_user.value === ingredient.value && current_user.key === ingredient.key;
-                }).length === 0;
+            // console.log(userList);
+            return this.props.userList.indexOf(ingredient) < 0;
         });
         return (
             <div>
@@ -87,22 +101,26 @@ class IngredientFinder extends React.Component {
                     onNewRequest={this.handleNewIngredient}
                     onUpdateInput={this.handleUpdateInput}
                 />
-                {/*<TagListBuilder listSource={this.props.userList}*/}
-                {/*click={this.props.click}*/}
-                {/*remove={this.handleDelete}*/}
-                {/*listHeader={this.props.listHeader} masterList={this.props.masterList}*/}
-                {/*loading={this.props.loadingUser}/>*/}
+                {this.state.loadingUser ?
+                    '' :
+                    <TagList listSource={this.props.userList}
+                             click={this.props.click}
+                             remove={this.handleDelete} uid={this.props.uid}
+                             listHeader={this.props.listHeader} masterList={this.props.masterIngredients}
+                             loading={this.props.loadingUser}/>
+                }
             </div>
         );
     }
 }
 IngredientFinder.propTypes = {
     masterIngredients: PropTypes.object.isRequired,
-    userList: PropTypes.object.isRequired,
-    addIngredient: PropTypes.func.isRequired,
+    userList: PropTypes.array.isRequired,
+    // addIngredient: PropTypes.func.isRequired,
     searchHintText: PropTypes.string.isRequired,
-    remove: PropTypes.func.isRequired,
-    // loadingUser: PropTypes.bool.isRequired
+    // remove: PropTypes.func.isRequired,
+    loadingUser: PropTypes.bool.isRequired,
+    uid: PropTypes.string.isRequired
 };
 
 export default IngredientFinder;
