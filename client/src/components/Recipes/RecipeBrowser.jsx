@@ -2,11 +2,13 @@ import React from 'react';
 import {GridList, GridTile} from 'material-ui/GridList';
 import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
+import {database} from '../../config/database'
 
 class RecipeBrowser extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            ingredients: {},
             masterRecipes: [],
             potentialRecipes: []
         };
@@ -24,32 +26,58 @@ class RecipeBrowser extends React.Component {
         // return (ingredient);
     }
 
-    componentDidMount() {
+    componentWillMount() {
         // this.bindAsArray(this.props.recipes, "recipes");
+        const comp = this;
         this.props.recipes.on('value', (snap) => {
             this.setState({
                 masterRecipes: Object.entries(snap.val())
             });
+        });
+
+        database.ref(`users/${this.props.uid}/ingredients`).on('value', (snap) => {
+            const list = snap.val();
+            const keys = list ? Object.keys(list) : [];
+            let potentials = [];
+            keys.map((ingredient) => (
+                database.ref(`ingredients/${ingredient}`).on('value', (snap) => {
+                    return snap.val().recipes.map((recipe) => (
+                        potentials.push(recipe)
+                    ))
+                })
+            ));
+            let seen = {};
+            potentials = potentials.filter((el, ind, arr) => {
+                return seen.hasOwnProperty(el) ? false : (seen[el] = true);
+            });
+            comp.setState({
+                ingredients: list,
+                potentialRecipes: potentials
+            })
         })
     }
 
     render() {
-
-
         return (
             <GridList cols={2} padding={15} cellHeight={400} style={{paddingTop: 15}}>
-                {this.state.masterRecipes.length > 0 ?
-                    this.state.masterRecipes.map((recipe, index) => {
+                {this.state.potentialRecipes.length > 0 ?
+                    this.state.potentialRecipes.map((recipe, index) => {
+                            let data;
+                            database.ref(`recipes/${recipe}`).on('value', (snap) => {
+                                data = snap.val();
+                                data.key = recipe;
+                                console.log(data);
+                            });
                             const featured = 0;
-                            const key = recipe[0];
-                            const value = recipe[1];
+                            const key = recipe.key;
+
                             return (
-                                <GridTile title={value.title}
-                                          key={key} titlePosition="top"
-                                          containerElement={<Link to={`recipe/${key}`}/>}
+                                <GridTile title={data.title}
+                                          key={data.key} titlePosition="top"
+                                          containerElement={<Link to={`recipe/${data.key}`}/>}
                                           rows={featured ? 2 : 1} cols={featured ? 2 : 1}
                                           titleBackground="linear-gradient(to bottom, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)">
-                                    <img alt="" src={value.imgUrl || '/images/dnLogo.png'}/>
+                                    <img alt="" src={data.imgUrl || '/images/dnLogo.png'}/>
                                 </GridTile>
                             );
                         }

@@ -14,7 +14,7 @@ class Dashboard extends React.Component {
         this.state = {
             user: {},
             uid: '0',
-            ingredients: {},
+            ingredients: [],
             masterIngredients: {},
             loadingRecipes: 'loading',
             loading: 'loading',
@@ -56,11 +56,6 @@ class Dashboard extends React.Component {
     }
 
 
-
-
-
-
-
     render() {
         return (
             <main className="dashboard__main">
@@ -87,6 +82,7 @@ class Dashboard extends React.Component {
                     </Toolbar>
 
                     <RecipeBrowser recipes={database.ref(`recipes`)} featured={this.state.featuredTags}
+                                   uid={this.state.uid} masterIngredients={this.state.masterIngredients}
                                    userIngredients={database.ref(`users/${this.state.uid}/ingredients`)}/>
                 </div>
             </main>
